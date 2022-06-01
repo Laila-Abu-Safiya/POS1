@@ -1,39 +1,45 @@
 import { useState, useEffect } from "react";
 import "./styles.css";
 
+function getFormValues() {
+  const storedValues = localStorage.getItem('Users');
+  return JSON.parse(storedValues);
+}
+
 export default function App() {
   const initialVal = {username:"",password:""};
-  const [Values, setValues] = useState(initialVal);
-  const [Errors, setErrors] = useState({});
-  const [submit, setSubmit] = useState(false);
-  const getChange = (e) => {
+  const [formValues, setValues] = useState(initialVal);
+  const [inputErrors, setErrors] = useState({});
+  const [isSubmit, setSubmit] = useState(false);
+  const handelChange = (e) => {
     
     const {name, value} = e.target;
-    setValues({ ...Values, [name]: value });
+    setValues({ ...formValues, [name]: value });
   };
   const handelSubmit = (e) => {
     e.preventDefault();
-    setErrors(checkValide(Values));
+    setErrors(checkValide(formValues));
     setSubmit(true);
   };
   useEffect(() => {
-    if (Object.keys(Errors).length === 0 && submit ){
+    if (Object.keys(inputErrors).length === 0 && isSubmit ){
+          localStorage.setItem('Users',JSON.stringify(formValues));
     }
-  },[Errors])
+  },[formValues])
 
-  const checkValide = (values) => {
+  const checkValide = (formValues) => {
     const errors = {};
     const constaint = /^(?=.*\d)(?=.*[A-z]).{4,}$/;
-    if(!values.username){
+    if(!formValues.username){
       errors.username = "Username is required";
 
     }
-    if(!values.password){
+    if(!formValues.password){
       errors.password = "Password is required";
       
-    }else if (Values.password < 4){
+    }else if (formValues.password < 4){
       errors.password = "Password should be at least 4 character";
-    }else if (!constaint.test(Values.password)){
+    }else if (!constaint.test(formValues.password)){
       errors.password = "Password should contain character and digits";
     }
     return errors;
@@ -46,15 +52,15 @@ export default function App() {
             <div className="uiForm">
 
             <div className="feild">
-                <input type="text" name="username" placeholder="username" value = {Values.username} onChange = {getChange}>
+                <input type="text" name="username" placeholder="username" value = {formValues.username} onChange = {handelChange}>
                 </input>
             </div>
-            <p>{Errors.username}</p>
+            <p>{inputErrors.username}</p>
             <div className="feild">
-                <input type="password" name="password" placeholder="password" value = {Values.passowrd} onChange = {getChange}>
+                <input type="password" name="password" placeholder="password" value = {formValues.passowrd} onChange = {handelChange}>
                 </input>
             </div>
-            <p>{Errors.password}</p>
+            <p>{inputErrors.password}</p>
             <button className = "loginButton">Login</button>
             </div>
             <h6>@2018 Demo</h6>
