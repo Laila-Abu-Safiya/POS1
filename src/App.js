@@ -7,8 +7,7 @@ function getFormValues() {
 }
 
 export default function App() {
-  const initialVal = {username:"",password:""};
-  const [formValues, setValues] = useState(initialVal);
+  const [formValues, setValues] = useState(getFormValues);
   const [inputErrors, setErrors] = useState({});
   const [isSubmit, setSubmit] = useState(false);
   const handelChange = (e) => {
@@ -22,9 +21,8 @@ export default function App() {
     setSubmit(true);
   };
   useEffect(() => {
-    if (Object.keys(inputErrors).length === 0 && isSubmit ){
           localStorage.setItem('Users',JSON.stringify(formValues));
-    }
+    
   },[formValues])
 
   const checkValide = (formValues) => {
