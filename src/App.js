@@ -23,7 +23,7 @@ export default function App() {
 
   const checkValide = (values) => {
     const errors = {};
-    const constaint = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$/;
+    const constaint = /^(?=.*\d)(?=.*[A-z]).{4,}$/;
     if(!values.username){
       errors.username = "Username is required";
 
